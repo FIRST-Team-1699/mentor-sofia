@@ -1,6 +1,6 @@
 plugins {
     id "java"
-    id "edu.wpi.first.GradleRIO" version "2026.1.1"
+    id "edu.wpi.first.GradleRIO" version "2026.2.1"
 }
 
 java {
@@ -54,6 +54,8 @@ def includeDesktopSupport = true
 // Also defines JUnit 5.
 dependencies {
     annotationProcessor wpi.java.deps.wpilibAnnotations()
+    annotationProcessor "org.littletonrobotics.akit:akit-autolog:26.0.2"
+    
     implementation wpi.java.deps.wpilib()
     implementation wpi.java.vendor.java()
 
