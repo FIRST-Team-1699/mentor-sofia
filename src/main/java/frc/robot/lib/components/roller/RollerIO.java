@@ -4,6 +4,7 @@ import org.littletonrobotics.junction.AutoLog;
 
 public interface RollerIO {
     public void setVoltage(double voltage);
+    public void updateInputs(RollerIOInputsAutoLogged inputs);
     
     @AutoLog
     public static class RollerIOInputs{
