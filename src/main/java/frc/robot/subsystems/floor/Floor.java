@@ -1,14 +1,14 @@
-package frc.robot.subsystems.indexer;
+package frc.robot.subsystems.floor;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.lib.components.roller.Roller;
 import frc.robot.lib.components.roller.RollerIO;
 
-public class Indexer extends SubsystemBase{
+public class Floor extends SubsystemBase{
     private Roller roller;
-    public Indexer(RollerIO io){
-        this.roller = new Roller(io, IndexerConstants.rollerConstants, "Indexer/Roller");
+    public Floor(RollerIO io){
+        this.roller = new Roller(io, FloorConstants.rollerConstants, "Floor/Roller");
     }
 
     private Command setVoltage(double Voltage){
@@ -16,7 +16,7 @@ public class Indexer extends SubsystemBase{
     }
 
     public Command feedShooter(){
-        return setVoltage(IndexerConstants.feedVoltage);
+        return setVoltage(FloorConstants.feedVoltage);
     }
 
     public Command stop(){
