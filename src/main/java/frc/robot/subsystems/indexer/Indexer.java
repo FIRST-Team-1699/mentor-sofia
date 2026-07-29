@@ -22,4 +22,9 @@ public class Indexer extends SubsystemBase{
     public Command stop(){
         return setVoltage(0);
     }
+
+    @Override
+    public void periodic() {
+        roller.periodic();
+    }
 }

@@ -33,4 +33,10 @@ public class IntakeRollers extends SubsystemBase{
     public Command stop(){
         return setVoltage(0,0);
     }
+
+    @Override
+    public void periodic() {
+        topRoller.periodic();
+        botRoller.periodic();
+    }
 }

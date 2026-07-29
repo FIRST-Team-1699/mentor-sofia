@@ -17,7 +17,7 @@ public class RollerIOTalonFX implements RollerIO {
 
     @Override
     public void updateInputs(RollerIOInputsAutoLogged inputs) {
-        inputs.voltage = motor.getSupplyVoltage().getValueAsDouble();
+        inputs.voltage = motor.getMotorVoltage().getValueAsDouble();
         inputs.current = motor.getSupplyCurrent().getValueAsDouble();
         inputs.position = motor.getPosition().getValueAsDouble();
         inputs.temperature = motor.getDeviceTemp().getValueAsDouble();
