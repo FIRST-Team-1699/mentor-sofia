@@ -1,41 +1,54 @@
 package frc.robot.subsystems.shooter;
 
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+
+import org.littletonrobotics.junction.Logger;
+
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.lib.components.roller.Roller;
-import frc.robot.lib.components.roller.RollerIO;
+import frc.robot.lib.components.flywheel.Flywheel;
+import frc.robot.lib.components.flywheel.FlywheelIO;
 
+public class Shooter extends SubsystemBase {
+    private Flywheel topFlywheel;
+    private Flywheel botFlywheel;
 
-public class Shooter extends SubsystemBase{
-    private Roller topRoller;
-    private Roller botRoller;
-    public Shooter(RollerIO topIo, RollerIO botIo){
-        this.topRoller = new Roller(topIo,ShooterConstants.topRollerConstants, "Shooter/TopRoller");
+    public Shooter(FlywheelIO topIo, FlywheelIO botIo) {
+        this.topFlywheel = new Flywheel(topIo, ShooterConstants.topFlywheelConstants, "Shooter/TopFlywheel");
 
-        this.botRoller = new Roller(botIo,ShooterConstants.botRollerConstants, "Shooter/BotRoller");
+        this.botFlywheel = new Flywheel(botIo, ShooterConstants.botFlywheelConstants, "Shooter/BotFlywheel");
 
-    }
-    private Command setVoltage(double topVoltage, double botVoltage){
-        return runOnce(() -> {
-          topRoller.setVoltage(topVoltage);
-          botRoller.setVoltage(botVoltage);
-        });
-    }
-
-    public Command intake(){
-        return setVoltage(ShooterConstants.topIntakeVoltage, ShooterConstants.botIntakeVoltage);
-    }
-    public Command outtake(){
-        return setVoltage(ShooterConstants.topOutakeVoltage,ShooterConstants.botOutakeVoltage);
-    }
-
-    public Command stop(){
-        return setVoltage(0,0);
     }
 
     @Override
     public void periodic() {
-        topRoller.periodic();
-        botRoller.periodic();
+        topFlywheel.periodic();
+        botFlywheel.periodic();
+        Logger.recordOutput("ShooterFlywheel/TopFlywheel/atGoal", topFlywheel.atGoal());
+        Logger.recordOutput("ShooterFlywheel/BotFlywheel/atGoal", botFlywheel.atGoal());
+    }
+
+    private Command setVelocityGoal(AngularVelocity goal) {
+        return runOnce(() -> {
+            topFlywheel.setGoal(goal);
+            botFlywheel.setGoal(goal);
+        });
+    }
+
+    public Command aimLow() {
+        return setVelocityGoal(ShooterConstants.lowVelocity);
+    }
+
+    public Command aimHigh() {
+        return setVelocityGoal(ShooterConstants.highVelocity);
+    }
+
+    public Command stop() {
+        return runOnce(() -> {
+            topFlywheel.setVoltage(0);
+            botFlywheel.setVoltage(0);
+        });
     }
 }

@@ -7,6 +7,9 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.lib.components.flywheel.Flywheel;
+import frc.robot.lib.components.flywheel.FlywheelIOTalonFX;
+import frc.robot.lib.components.pivot.PivotIOTalonFX;
 import frc.robot.lib.components.roller.RollerIO;
 import frc.robot.lib.components.roller.RollerIOTalonFX;
 import frc.robot.subsystems.floor.Floor;
@@ -17,6 +20,8 @@ import frc.robot.subsystems.intakeRollers.IntakeRollers;
 import frc.robot.subsystems.intakeRollers.IntakeRollersConstants;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.ShooterConstants;
+import frc.robot.subsystems.shooterPivot.ShooterPivot;
+import frc.robot.subsystems.shooterPivot.ShooterPivotConstants;
 
 public class RobotContainer {
   private Indexer indexer;
@@ -24,25 +29,32 @@ public class RobotContainer {
   private IntakeRollers intakeRollers;
   private Shooter shooter;
   private CommandXboxController drivController, opController;
+  private ShooterPivot shooterPivot;
   public RobotContainer() {
     this.indexer = new Indexer(new RollerIOTalonFX(IndexerConstants.rollerConstants));
     this.floor = new Floor(new RollerIOTalonFX(FloorConstants.rollerConstants));
-    this.shooter = new Shooter(new RollerIOTalonFX(ShooterConstants.topRollerConstants), new RollerIOTalonFX(ShooterConstants.botRollerConstants));
+    this.shooter = new Shooter(new FlywheelIOTalonFX(ShooterConstants.topFlywheelConstants), new FlywheelIOTalonFX(ShooterConstants.botFlywheelConstants));
     this.drivController = new CommandXboxController(RobotConstants.DRIVER_CONTROLLER_PORT);
     this.opController = new CommandXboxController(RobotConstants.OPERATOR_CONTROLLER_PORT);
     this.intakeRollers = new IntakeRollers(new RollerIOTalonFX(IntakeRollersConstants.topRollerConstants), new RollerIOTalonFX(IntakeRollersConstants.botRollerConstants));
+    this.shooterPivot = new ShooterPivot(new PivotIOTalonFX(ShooterPivotConstants.pivotConstants));
     configureBindings();
   }
 
   private void configureBindings() {
     opController.x().onTrue(indexer.feedShooter()).onFalse(indexer.stop());
     opController.y().onTrue(floor.feedShooter()).onFalse(floor.stop());
-    opController.b().onTrue(indexer.feedShooter().alongWith(floor.feedShooter(), shooter.intake())).onFalse(indexer.stop().alongWith(floor.stop(), shooter.stop()));
+    opController.b().onTrue(indexer.feedShooter().alongWith(floor.feedShooter())).onFalse(indexer.stop().alongWith(floor.stop()));
     opController.a().onTrue(intakeRollers.intake()).onFalse(intakeRollers.stop());
   }
 
   public Command getAutonomousCommand() {
-    return Commands.print("No autonomous command configured");
+    return Commands.sequence(
+      shooter.aimHigh(),
+      Commands.waitSeconds(5),
+      shooter.stop(),
+      Commands.waitSeconds(5)
+    ).repeatedly();
   }
 
 
