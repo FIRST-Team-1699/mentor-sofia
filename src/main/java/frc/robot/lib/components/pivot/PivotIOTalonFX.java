@@ -9,6 +9,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.GravityTypeValue;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 
@@ -23,7 +24,7 @@ public class PivotIOTalonFX implements PivotIO {
         followMotor = new TalonFX(constants.followCanID);
         TalonFXConfiguration config = new TalonFXConfiguration();
         config.withSlot0(new Slot0Configs().withKP(constants.kP).withKD(constants.kD).withKS(constants.kS)
-                .withKV(constants.kV).withKA(constants.kA).withKG(constants.kG));
+                .withKV(constants.kV).withKA(constants.kA).withKG(constants.kG).withGravityType(GravityTypeValue.Arm_Cosine));
         config.withFeedback(new FeedbackConfigs().withSensorToMechanismRatio(constants.sensorToMechanismRatio));
         config.withMotorOutput(new MotorOutputConfigs().withInverted(constants.leadInversion));
         leadMotor.getConfigurator().apply(config);
@@ -31,6 +32,7 @@ public class PivotIOTalonFX implements PivotIO {
         this.constants = constants;
         this.goal = Rotation2d.kZero;
         followMotor.setControl(new Follower(constants.leadCanID, constants.followerAlignment));
+        leadMotor.setPosition(constants.offset);
     }
 
     @Override
