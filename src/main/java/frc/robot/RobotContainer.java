@@ -71,14 +71,14 @@ public class RobotContainer {
 
   private void configureBindings() {
 
-    opController.x().onTrue(
-        new ConditionalCommand(intakePivot.intakeRetract(), intakePivot.intakeDeploy(), intakePivot::isDeployed));
-    opController.y().onTrue(shooter.aimHigh()).onFalse(shooter.stop());
-    opController.b().onTrue(indexer.feedShooter().alongWith(floor.feedShooter()))
-        .onFalse(indexer.stop().alongWith(floor.stop()));
+    //opController.x().onTrue(
+    //    new ConditionalCommand(intakePivot.intakeRetract(), intakePivot.intakeDeploy(), intakePivot::isDeployed));
+    //opController.y().onTrue(shooter.aimHigh()).onFalse(shooter.stop());
+    //opController.b().onTrue(indexer.feedShooter().alongWith(floor.feedShooter()))
+    //    .onFalse(indexer.stop().alongWith(floor.stop()));
     opController.a().onTrue(intakeRollers.intake()).onFalse(intakeRollers.stop());
-    driveController.y()
-        .onTrue(Commands.runOnce(() -> drive.setPose(new Pose2d(drive.getPose().getTranslation(), new Rotation2d(0)))));
+    //driveController.y()
+    //    .onTrue(Commands.runOnce(() -> drive.setPose(new Pose2d(drive.getPose().getTranslation(), new Rotation2d(0)))));
   }
 
   public Command getAutonomousCommand() {
