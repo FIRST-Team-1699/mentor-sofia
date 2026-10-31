@@ -7,12 +7,12 @@ public class RollerIOTalonFX implements RollerIO {
     private TalonFX motor;
 
     public RollerIOTalonFX(RollerConstants constants){
-        motor = new TalonFX(constants.canID);
+        
     }
 
     @Override
     public void setVoltage(double voltage) {
-        motor.setControl(new VoltageOut(voltage));
+       
     }
 
     @Override

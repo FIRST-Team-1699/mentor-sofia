@@ -11,10 +11,7 @@ public class IntakeRollers extends SubsystemBase{
     private Roller topRoller;
     private Roller botRoller;
     public IntakeRollers(RollerIO topIo, RollerIO botIo){
-        this.topRoller = new Roller(topIo,IntakeRollersConstants.topRollerConstants, "IntakeRollers/TopRoller");
-
-        this.botRoller = new Roller(botIo,IntakeRollersConstants.botRollerConstants, "IntakeRollers/BotRoller");
-
+     
     }
     private Command setVoltage(double topVoltage, double botVoltage){
         return runOnce(() -> {
@@ -24,14 +21,14 @@ public class IntakeRollers extends SubsystemBase{
     }
 
     public Command intake(){
-        return setVoltage(IntakeRollersConstants.topIntakeVoltage, IntakeRollersConstants.botIntakeVoltage);
+       
     }
     public Command outtake(){
-        return setVoltage(IntakeRollersConstants.topOutakeVoltage,IntakeRollersConstants.botOutakeVoltage);
+        
     }
 
     public Command stop(){
-        return setVoltage(0,0);
+       
     }
 
     @Override
